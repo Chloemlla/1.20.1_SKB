@@ -11,12 +11,12 @@ public class PlaceholderFormatter {
 
     /**
      *  Formats all the placeholders in a string.
-     *  ex. "$cHello" -> "§cHello"
+     *  ex. "$cHello" -> "\u00A7cHello"
      * @param s string to format
      * @return formatted string
      */
     public static String format(String s) {
-        return s.replace("$", "§");
+        return s.replace("$", "\u00A7");
     }
     public static List<String> format(List<String> s) {
         s = new ArrayList<>(s); // Create mutable copy

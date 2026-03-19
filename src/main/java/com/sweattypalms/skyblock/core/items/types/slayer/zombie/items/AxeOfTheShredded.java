@@ -194,9 +194,18 @@ public class AxeOfTheShredded extends SkyblockItem implements IHasAbility {
 
                     // TODO: Implement hit detection and damage
                     double range = 1.2;
-                    List<LivingEntity> nearbyEntities = armorstand.getNearbyEntities(range, range, range)
-                            .stream().filter(entity -> entity instanceof LivingEntity && !(entity instanceof ArmorStand) && !(entity instanceof Player))
-                            .map(entity -> (LivingEntity) entity).toList();
+                    List<LivingEntity> nearbyEntities = armorstand.getWorld().getNearbyEntities(
+                                    armorstand.getLocation(),
+                                    range,
+                                    range,
+                                    range,
+                                    entity -> entity instanceof LivingEntity
+                                            && !(entity instanceof ArmorStand)
+                                            && !(entity instanceof Player)
+                            ).stream()
+                            .filter(LivingEntity.class::isInstance)
+                            .map(LivingEntity.class::cast)
+                            .toList();
 
                     nearbyEntities.forEach(entity -> {
                         if (hitEntities.contains(entity)) return;

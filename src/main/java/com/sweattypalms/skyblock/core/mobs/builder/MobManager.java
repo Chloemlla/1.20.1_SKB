@@ -1,5 +1,7 @@
 package com.sweattypalms.skyblock.core.mobs.builder;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Modifier;
@@ -20,8 +22,8 @@ public class MobManager {
                 String id = clazz.getDeclaredField("ID").get(null).toString();
                 MOBS_LIST.put(id, clazz);
             } catch (Exception e) {
-                System.out.println("Failed to load mob: " + clazz.getName());
-                System.out.println("Are you missing the `ID` field?");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to load mob: " + clazz.getName());
+                Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Are you missing the `ID` field?");
             }
         }
     }

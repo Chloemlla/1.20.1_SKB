@@ -11,6 +11,8 @@ prefix: "Skyblock"
 # For the dragon world, otherwise messes up the loading.
 loadbefore:
   - MultiVerse-Core
+depend:
+  - ProtocolLib
 
 
 

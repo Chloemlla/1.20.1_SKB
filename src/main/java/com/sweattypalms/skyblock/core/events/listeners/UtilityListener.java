@@ -72,23 +72,23 @@ public class UtilityListener implements Listener {
         message = PlaceholderFormatter.format(message);
         event.getPlayer().sendMessage(message);
 
-        TextComponent discord = new TextComponent("§9§l[Discord] ");
+        TextComponent discord = new TextComponent("\u00A79\u00A7l[Discord] ");
         discord.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.com/invite/Ew4u4TRbQ6"));
-        discord.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§9Click to join my discord!")));
+        discord.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("\u00A79Click to join my discord!")));
 
-        TextComponent github = new TextComponent("§0§l[Github] ");
+        TextComponent github = new TextComponent("\u00A70\u00A7l[Github] ");
         github.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Sweattypalms/skyblock-remake"));
-        github.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§9Click to view my github!")));
+        github.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("\u00A79Click to view my github!")));
 
-        TextComponent youtube = new TextComponent("§c§l[Youtube] ");
+        TextComponent youtube = new TextComponent("\u00A7c\u00A7l[Youtube] ");
         youtube.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/@Sweattypalms"));
-        youtube.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§9Click to view my youtube! (Make sure to subscribe!)")));
+        youtube.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("\u00A79Click to view my youtube! (Make sure to subscribe!)")));
 
-        TextComponent credits = new TextComponent("§a§l[Credits] ");
+        TextComponent credits = new TextComponent("\u00A7a\u00A7l[Credits] ");
         credits.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/credits"));
-        credits.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§9Click to view the credits!")));
+        credits.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("\u00A79Click to view the credits!")));
 
-        TextComponent infoMessage = new TextComponent("§eJoin my discord for updates, sneak peaks, and more!");
+        TextComponent infoMessage = new TextComponent("\u00A7eJoin my discord for updates, sneak peaks, and more!");
 
         event.getPlayer().spigot().sendMessage(infoMessage);
 

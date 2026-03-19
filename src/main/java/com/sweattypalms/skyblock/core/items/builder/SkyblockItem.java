@@ -150,12 +150,12 @@ public abstract class SkyblockItem {
             lore.add(PlaceholderFormatter.format(builder));
         }
 
-        if (!lore.isEmpty()) lore.add("§7");
+        if (!lore.isEmpty()) lore.add("\u00A77");
 
         List<String> enchantmentsLore = buildEnchantmentsLore(itemStack);
         lore.addAll(enchantmentsLore);
 
-        if (!enchantmentsLore.isEmpty()) lore.add("§7");
+        if (!enchantmentsLore.isEmpty()) lore.add("\u00A77");
 
         /**
          * If the item has a personalized description, use that
@@ -166,12 +166,12 @@ public abstract class SkyblockItem {
             lore.addAll(skyblockItem.f_getStaticLore());
         }
 
-        if (skyblockItem.getStaticLore() != null || skyblockItem instanceof IPersonalizedDescription) lore.add("§7");
+        if (skyblockItem.getStaticLore() != null || skyblockItem instanceof IPersonalizedDescription) lore.add("\u00A77");
 
         if (skyblockItem instanceof IShortBow shortBow) {
             lore.add(rarity.getColor() + "Shortbow: Instantly shoots!");
             lore.addAll(PlaceholderFormatter.format(shortBow.getShortBowDescription()));
-            lore.add("§7");
+            lore.add("\u00A77");
         }
 
         String ultimateWise = "ultimate_wise";
@@ -180,7 +180,7 @@ public abstract class SkyblockItem {
 
         lore.addAll(ReforgeManager.getReforgeLore(reforge));
 
-        if (reforge instanceof IAdvancedReforge) lore.add("§7"); // Will automatically check if the reforge isn't null
+        if (reforge instanceof IAdvancedReforge) lore.add("\u00A77"); // Will automatically check if the reforge isn't null
 
         lore.addAll(skyblockItem.f_getRarityLine(upgraded));
 
@@ -348,16 +348,16 @@ public abstract class SkyblockItem {
         List<String> lore = new ArrayList<>(
                 buildStatsLore(stats)
         );
-        if (!lore.isEmpty()) lore.add("§7");
+        if (!lore.isEmpty()) lore.add("\u00A77");
 
         lore.addAll(f_getStaticLore());
 
-        if (this.staticLore != null) lore.add("§7");
+        if (this.staticLore != null) lore.add("\u00A77");
 
         if (this instanceof IShortBow shortBow) {
-            lore.add("§6Shortbow: Instantly shoots!");
+            lore.add("\u00A76Shortbow: Instantly shoots!");
             lore.addAll(PlaceholderFormatter.format(shortBow.getShortBowDescription()));
-            lore.add("§7");
+            lore.add("\u00A77");
         }
 
         lore.addAll(f_getAbilityLore());
@@ -423,7 +423,7 @@ public abstract class SkyblockItem {
                     cooldownLine = PlaceholderFormatter.format(cooldownLine);
                     lore.add(cooldownLine);
                 }
-                lore.add("§7");
+                lore.add("\u00A77");
             });
         }
         return lore;
@@ -433,7 +433,7 @@ public abstract class SkyblockItem {
      * This is made to be overridden;
      * In dungeon item, you can display stars and things with the name by overriding.
      *
-     * @return "§l§6Diamond Sword"
+     * @return "\u00A7l\u00A76Diamond Sword"
      */
     public String f_getDisplayName() {
         return f_getDisplayName(false, null);
@@ -459,16 +459,16 @@ public abstract class SkyblockItem {
 
         if (upgraded) rarity = rarity.getUpgraded();
 
-        String canBeReforged = "§8This item can be reforged!";
+        String canBeReforged = "\u00A78This item can be reforged!";
         if (!upgraded && this.itemType != SkyblockItemType.NONE) lore.add(canBeReforged);
 
         String type = this.itemType == SkyblockItemType.NONE ? "" : String.valueOf(this.itemType);
 
-        String upgradedObfuscationMark = "§l§kU";
+        String upgradedObfuscationMark = "\u00A7l\u00A7kU";
 
         String rarityLine = "";
         if (upgraded) rarityLine += rarity.getColor() + upgradedObfuscationMark;
-        rarityLine += rarity.getColor() + "§l" + (upgraded ? " " : "") + rarity + " " + type;
+        rarityLine += rarity.getColor() + "\u00A7l" + (upgraded ? " " : "") + rarity + " " + type;
         if (upgraded) rarityLine += " " + upgradedObfuscationMark;
 
         lore.add(rarityLine);

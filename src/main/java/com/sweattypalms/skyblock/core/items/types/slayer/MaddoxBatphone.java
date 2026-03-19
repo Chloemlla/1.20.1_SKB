@@ -132,11 +132,11 @@ public class MaddoxBatphone extends SkyblockItem implements IHeadHelmet, IHasAbi
                     "✆ You again? What do you want this time? "
             };
 
-            // minecraft color code: §
-            TextComponent textComponent = new TextComponent("§a§l[OPEN MENU]");
+            // minecraft color code: \u00A7
+            TextComponent textComponent = new TextComponent("\u00A7a\u00A7l[OPEN MENU]");
             textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + PlayerCommands.BATPHONE_COMMAND));
 
-            TextComponent goodMessage = new TextComponent("§a" + possibleGoodMessages[random.nextInt(possibleGoodMessages.length)]);
+            TextComponent goodMessage = new TextComponent("\u00A7a" + possibleGoodMessages[random.nextInt(possibleGoodMessages.length)]);
 
             sequence.add(new SequenceAction(() -> {
                 player.getPlayer().spigot().sendMessage(ChatMessageType.CHAT, goodMessage, textComponent);

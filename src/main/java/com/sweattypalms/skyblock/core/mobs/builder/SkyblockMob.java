@@ -252,10 +252,10 @@ public class SkyblockMob {
     private void configureArmorStand(ArmorStand armorStand, double damage, boolean showCritEffect) {
         armorStand.setInvisible(true);
         String actualDmg = formatDamageString(damage);
-        String star = "§f ✧ ";
+        String star = "\u00A7f ✧ ";
         String customName = star + actualDmg + ChatColor.WHITE + " ✧";
         if (!showCritEffect) {
-            customName = "§7" + (int) Math.floor(damage);
+            customName = "\u00A77" + (int) Math.floor(damage);
         }
         armorStand.setCustomName(customName);
         armorStand.setCustomNameVisible(true);
@@ -273,10 +273,10 @@ public class SkyblockMob {
         for (int i = 0; i < dmg.length(); i++) {
             char c = dmg.charAt(i);
             switch (i % 4) {
-                case 0 -> actualDmg.append("§f");
-                case 1 -> actualDmg.append("§e");
-                case 2 -> actualDmg.append("§6");
-                case 3 -> actualDmg.append("§c");
+                case 0 -> actualDmg.append("\u00A7f");
+                case 1 -> actualDmg.append("\u00A7e");
+                case 2 -> actualDmg.append("\u00A76");
+                case 3 -> actualDmg.append("\u00A7c");
             }
             actualDmg.append(c);
         }

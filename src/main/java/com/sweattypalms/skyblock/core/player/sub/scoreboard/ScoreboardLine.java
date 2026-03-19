@@ -55,7 +55,7 @@ public class ScoreboardLine {
         prefix = input.substring(0, maxchars);
         suffix = input.substring(maxchars);
 
-        boolean ewc = prefix.endsWith("§");
+        boolean ewc = prefix.endsWith("\u00A7");
 
         if (ewc) {
             prefix = input.substring(0, maxchars - 1);

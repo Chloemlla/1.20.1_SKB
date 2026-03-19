@@ -76,7 +76,7 @@ public class CommandRegistry {
             });
 
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            System.out.printf("Failed to register command %s%n", container.commandMethod.getName());
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed to register command " + container.commandMethod.getName());
             throw new RuntimeException(e);
         }
     }
@@ -103,7 +103,7 @@ public class CommandRegistry {
                     container.tabCompleterMethod = method;
                 } else {
                     // Handle case where there's a completer for a non-existent command
-                    System.out.println(ChatColor.YELLOW + "[Warning] TabCompleter for non-existent command: " + completerInfo.command());
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[Warning] TabCompleter for non-existent command: " + completerInfo.command());
                 }
             }
         }
@@ -125,17 +125,27 @@ public class CommandRegistry {
             return true;
         }
 
-        // First try to get a commandMethod with args of (Player player, String[] args)
         try {
-            container.commandMethod.invoke(container.instance, player, args);
-            return true;
-        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-            // If first failed, try to get a commandMethod with args of (Player player)
-            try {
+            if (container.commandMethod.getParameterCount() == 2) {
+                container.commandMethod.invoke(container.instance, player, args);
+                return true;
+            }
+
+            if (container.commandMethod.getParameterCount() == 1) {
                 container.commandMethod.invoke(container.instance, player);
                 return true;
-            } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException _i) {
             }
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error while executing command /" + command + ": " + cause.getMessage());
+            cause.printStackTrace();
+            player.sendMessage(ChatColor.RED + "Command failed, check console for details.");
+            return true;
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Failed invoking command /" + command + ": " + e.getMessage());
+            e.printStackTrace();
+            player.sendMessage(ChatColor.RED + "Command failed, check console for details.");
+            return true;
         }
 
         return false;

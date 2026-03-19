@@ -51,7 +51,7 @@ public final class SkyBlock extends JavaPlugin {
             configs();
 
             long end = System.currentTimeMillis() - start;
-            System.out.println(ChatColor.GREEN + "Skyblock has been enabled! This took " + ChatColor.YELLOW + end + "ms");
+            logSuccess("Skyblock has been enabled! This took " + ChatColor.YELLOW + end + ChatColor.GREEN + "ms");
         });
 
         drawAscii();
@@ -67,25 +67,25 @@ public final class SkyBlock extends JavaPlugin {
     }
 
     private void registerCraft() {
-        System.out.println("Registering items...");
+        logInfo("Registering items...");
         ItemManager.init();
-        System.out.println(ChatColor.GREEN + "Successfully loaded " + ItemManager.ITEMS_LIST.size() + " items.");
+        logSuccess("Successfully loaded " + ItemManager.ITEMS_LIST.size() + " items.");
 
-        System.out.println("Registering mobs...");
+        logInfo("Registering mobs...");
         MobManager.init();
-        System.out.println(ChatColor.GREEN + "Successfully loaded " + MobManager.MOBS_LIST.size() + " mobs.");
+        logSuccess("Successfully loaded " + MobManager.MOBS_LIST.size() + " mobs.");
 
-        System.out.println("Registering reforges...");
+        logInfo("Registering reforges...");
         ReforgeManager.init();
-        System.out.println(ChatColor.GREEN + "Successfully loaded " + ReforgeManager.REFORGES_LIST.size() + " reforges.");
+        logSuccess("Successfully loaded " + ReforgeManager.REFORGES_LIST.size() + " reforges.");
 
-        System.out.println("Registering enchantments...");
-         EnchantManager.init();
-        System.out.println(ChatColor.GREEN + "Successfully loaded " + EnchantManager.ENCHANTMENTS.size() + " enchantments.");
+        logInfo("Registering enchantments...");
+        EnchantManager.init();
+        logSuccess("Successfully loaded " + EnchantManager.ENCHANTMENTS.size() + " enchantments.");
     }
 
     public void registerListeners() {
-        System.out.println("Registering listeners...");
+        logInfo("Registering listeners...");
         long start = System.currentTimeMillis();
         Reflections reflections = new Reflections("com.sweattypalms.skyblock");
         Set<Class<? extends Listener>> listenerClasses = reflections.getSubTypesOf(org.bukkit.event.Listener.class);
@@ -98,15 +98,15 @@ public final class SkyBlock extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-        System.out.printf("Registered listeners in %sms\n", System.currentTimeMillis() - start);
-        System.out.println(ChatColor.GREEN + "Successfully registered " + listenerClasses.size() + " listeners.");
+        logInfo("Registered listeners in " + (System.currentTimeMillis() - start) + "ms");
+        logSuccess("Successfully registered " + listenerClasses.size() + " listeners.");
     }
 
     public void registerCommands() {
-        System.out.println("Registering commands...");
+        logInfo("Registering commands...");
         CommandRegistry commandRegistry = new CommandRegistry();
         commandRegistry.registerAll();
-        System.out.println(ChatColor.GREEN + "Successfully registered " + commandRegistry.getCommandsAmt() + " commands.");
+        logSuccess("Successfully registered " + commandRegistry.getCommandsAmt() + " commands.");
     }
 
     private void configs() {
@@ -131,7 +131,9 @@ public final class SkyBlock extends JavaPlugin {
         graphics.drawString("SWEATTY", 10, 20);
 
 
-        System.out.println("\n\n\n");
+        getLogger().info("");
+        getLogger().info("");
+        getLogger().info("");
         for (int y = 0; y < height; y++) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int x = 0; x < width; x++) {
@@ -140,12 +142,24 @@ public final class SkyBlock extends JavaPlugin {
             if (stringBuilder.toString().trim().isEmpty()) {
                 continue;
             }
-            System.out.println(stringBuilder);
+            getLogger().info(stringBuilder.toString());
         }
     }
 
     @Override
     public void onDisable() {
-        System.out.println(ChatColor.RED + "Skyblock has been disabled!");
+        logError("Skyblock has been disabled!");
+    }
+
+    private void logInfo(String message) {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GRAY + message);
+    }
+
+    private void logSuccess(String message) {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + message);
+    }
+
+    private void logError(String message) {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + message);
     }
 }

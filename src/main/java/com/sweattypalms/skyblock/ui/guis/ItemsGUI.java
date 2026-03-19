@@ -1,15 +1,15 @@
 package com.sweattypalms.skyblock.ui.guis;
 
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
-import com.sweattypalms.skyblock.ui.BaseGUI;
 import com.sweattypalms.skyblock.ui.ClickableItem;
+import com.sweattypalms.skyblock.ui.PaginatedGUI;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 
 import static com.sweattypalms.skyblock.core.items.ItemManager.ITEMS_LIST;
 
-public class ItemsGUI extends BaseGUI {
+public class ItemsGUI extends PaginatedGUI {
 
     private static final int SIZE = 6 * 9; // 6 rows of 9 slots
 
@@ -18,15 +18,16 @@ public class ItemsGUI extends BaseGUI {
     }
 
     @Override
-    public void initializeItems(Player player) {
+    protected List<ClickableItem> getPaginatedItems(Player player) {
         List<SkyblockItem> sortedItemList = getSkyblockItems();
-
+        List<ClickableItem> items = new ArrayList<>();
         for (SkyblockItem item : sortedItemList) {
-            setNextItem(new ClickableItem(item.toItemStack(), (p) -> {
+            items.add(new ClickableItem(item.toItemStack(), (p) -> {
                 p.sendMessage("You clicked the " + item.f_getDisplayName() + "!");
                 p.getInventory().addItem(item.toItemStack());
             }));
         }
+        return items;
     }
 
     private static List<SkyblockItem> getSkyblockItems() {

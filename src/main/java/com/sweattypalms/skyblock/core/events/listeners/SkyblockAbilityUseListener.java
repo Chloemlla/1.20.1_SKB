@@ -9,6 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class SkyblockAbilityUseListener implements Listener {
+    // Test mode: force all ability energy costs to 1.
+    private static final boolean FORCE_TEST_ABILITY_COST = true;
+    private static final double FORCED_ABILITY_COST = 1.0;
 
     @EventHandler
     public void onUse(SkyblockAbilityUseEvent event) {
@@ -17,7 +20,11 @@ public class SkyblockAbilityUseListener implements Listener {
         if (!(event.getAbility() instanceof IUsageCost costAbility)) return;
 
         costAbility.getCost(event.getSkyblockPlayer()).forEach((stat, value) -> {
-            value = value * event.getCostMultiplier();
+            if (FORCE_TEST_ABILITY_COST) {
+                value = FORCED_ABILITY_COST;
+            } else {
+                value = value * event.getCostMultiplier();
+            }
 
             if (event.getSkyblockPlayer().getStatsManager().getLiveStats().get(stat) < value) {
                 event.setCancelled(true);

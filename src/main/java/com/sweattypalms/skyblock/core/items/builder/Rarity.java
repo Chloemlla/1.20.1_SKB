@@ -4,15 +4,15 @@ import lombok.Getter;
 
 @Getter
 public enum Rarity {
-    COMMON("§f"),
-    UNCOMMON("§a"),
-    RARE("§9"),
-    EPIC("§5"),
-    LEGENDARY("§6"),
-    MYTHIC("§d"),
-    DIVINE("§b"),
-    SPECIAL("§c"),
-    VERY_SPECIAL("§c");
+    COMMON("\u00A7f"),
+    UNCOMMON("\u00A7a"),
+    RARE("\u00A79"),
+    EPIC("\u00A75"),
+    LEGENDARY("\u00A76"),
+    MYTHIC("\u00A7d"),
+    DIVINE("\u00A7b"),
+    SPECIAL("\u00A7c"),
+    VERY_SPECIAL("\u00A7c");
 
     private final String color;
 

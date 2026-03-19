@@ -71,9 +71,9 @@ public class PlayerCommands {
     @Command(name="credits", description="Credits command")
     public void creditsCommand(Player player) {
         SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
-        String obfus = "§c§l§kU";
+        String obfus = "\u00A7c\u00A7l\u00A7kU";
 
-        String sweattypalms = obfus + "§c§l Sweattypalms " + obfus;
+        String sweattypalms = obfus + "\u00A7c\u00A7l Sweattypalms " + obfus;
 
         skyblockPlayer.sendMessage("$aThis server was made by " + sweattypalms + "$a.");
     }

@@ -41,7 +41,7 @@ public class DragonDropItemEntity extends EntityItem implements IDragonLoot {
         ItemStack itemStack = dropItem.toItemStack();
         String displayName = itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() ? itemStack.getItemMeta().getDisplayName() : itemStack.getType().name();
         if (itemStack.getAmount() > 1) {
-            displayName += " §8" + itemStack.getAmount() + "x";
+            displayName += " \u00A78" + itemStack.getAmount() + "x";
         }
 
         String finalDisplayName = displayName;

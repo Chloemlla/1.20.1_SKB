@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Getter
 public class ScoreboardManager {
-    private static final String SCOREBOARD_TITLE = "§6§lSKYBLOCK";
+    private static final String SCOREBOARD_TITLE = "\u00A76\u00A7lSKYBLOCK";
     private static final String OBJECTIVE_NAME = "sb";
     private static final String OBJECTIVE_CRITERIA = "dummy";
     private final SkyblockPlayer player;

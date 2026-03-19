@@ -20,7 +20,7 @@ public class SlayerSelectorGUI extends BaseGUI {
 
     private static final ClickableItem REVENANT_HORROR = getSlayerItem(
             Material.ROTTEN_FLESH,
-//            what is yellow color code in minecraft? it is §e
+//            what is yellow color code in minecraft? it is \u00A7e
             "$c☠ $eRevenant Horror",
             List.of(
                     "$7Abhorrent Zombie stuck",

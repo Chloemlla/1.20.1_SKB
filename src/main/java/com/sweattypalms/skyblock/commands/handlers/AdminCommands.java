@@ -65,7 +65,7 @@ public class AdminCommands {
     public void itemCommand(Player player, String[] args) {
         if (args.length == 0) {
             String message = ChatColor.YELLOW + "If you want to get an item of a specific id, do:";
-            message += "\n" + ChatColor.YELLOW + "/item <id> [optional: amount]";
+            message += "\n" + ChatColor.YELLOW + "/sitem <id> [optional: amount]";
             player.sendMessage(message);
 
             ItemsGUI gui = new ItemsGUI();

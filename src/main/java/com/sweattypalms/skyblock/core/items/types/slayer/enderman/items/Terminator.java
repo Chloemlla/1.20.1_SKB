@@ -281,11 +281,18 @@ public class Terminator extends SkyblockItem implements IHasAbility, IShortBow {
         }
 
         private void damageNearbyEntities(Player p, ItemStack activatorItem, ArmorStand armorstand, ArrayList<LivingEntity> cleansedEntities) {
-            armorstand.getNearbyEntities(2, 1, 2).forEach(ent_ -> {
-                if (!(ent_ instanceof LivingEntity ent) && !(ent_ instanceof EnderDragonPart)) return;
+            armorstand.getWorld().getNearbyEntities(
+                    armorstand.getLocation(),
+                    2,
+                    1,
+                    2,
+                    entity -> entity instanceof LivingEntity || entity instanceof EnderDragonPart
+            ).forEach(ent_ -> {
+                LivingEntity ent = ent_ instanceof EnderDragonPart
+                        ? ((EnderDragonPart) ent_).getParent()
+                        : (LivingEntity) ent_;
 
-                LivingEntity ent = ent_ instanceof EnderDragonPart ? ((EnderDragonPart) ent_).getParent() : (LivingEntity) ent_;
-
+                if (ent == null) return;
                 if (ent == p) return;
 
                 if (cleansedEntities.contains(ent)) return;
