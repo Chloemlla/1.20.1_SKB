@@ -5,6 +5,8 @@ import com.sweattypalms.skyblock.core.dungeons.generation.DungeonPreset;
 import com.sweattypalms.skyblock.core.dungeons.generation.DungeonRoomType;
 import com.sweattypalms.skyblock.core.dungeons.generation.DungeonSpecialType;
 import com.sweattypalms.skyblock.core.dungeons.generation.LegacyGenerator;
+import com.sweattypalms.skyblock.core.dungeons.map.DungeonMap;
+import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,12 +15,14 @@ import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -126,8 +130,26 @@ public final class DungeonGenerationService {
                 spawnRoom[1] * ROOM_SPACING + 15.5
         );
         player.teleport(spawnLoc);
-        player.sendMessage("§aDungeon generated with preset §e" + preset.name() + "§a in world §e" + world.getName() + "§a.");
+        giveMapToPlayer(player, world, generator, preset);
+        player.sendMessage(ChatColor.GREEN + "Dungeon generated with preset " + ChatColor.YELLOW + preset.name()
+                + ChatColor.GREEN + " in world " + ChatColor.YELLOW + world.getName() + ChatColor.GREEN + ".");
         return world;
+    }
+
+    private static void giveMapToPlayer(Player player, World world, LegacyGenerator generator, DungeonPreset preset) {
+        DungeonMap dungeonMap = new DungeonMap(generator, preset);
+        ItemStack mapItem = dungeonMap.getItem(world);
+        HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(mapItem);
+
+        if (!leftover.isEmpty()) {
+            for (ItemStack item : leftover.values()) {
+                world.dropItemNaturally(player.getLocation(), item);
+            }
+            player.sendMessage(ChatColor.YELLOW + "Your inventory is full, the dungeon map was dropped on the ground.");
+            return;
+        }
+
+        player.sendMessage(ChatColor.AQUA + "You received a dungeon map.");
     }
 
     private static LegacyGenerator buildValidGenerator(DungeonPreset preset) {
