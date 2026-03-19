@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock.core.mobs.builder;
 import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
+import com.sweattypalms.skyblock.core.mobs.ai.MobAI;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IHasAbilityDamage;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
@@ -28,8 +29,11 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SkyblockMob {
@@ -50,6 +54,10 @@ public class SkyblockMob {
     private LivingEntity entityInstance;
     @Getter
     private SkyblockPlayer lastDamager;
+    private final List<String> aiGoalSelectors = new ArrayList<>();
+    private final List<String> aiTargetSelectors = new ArrayList<>();
+    private final Map<String, Float> aiPathfindingMalus = new ConcurrentHashMap<>();
+    private boolean aiModifiersApplied = false;
 
     public SkyblockMob(String id, Class<? extends ISkyblockMob> nmsClass) {
         this.id = id;
@@ -86,6 +94,7 @@ public class SkyblockMob {
         }
 
         initMob();
+        applyAIModifiers();
         heartbeat();
 
         if (onSpawn != null) onSpawn.run();
@@ -118,7 +127,14 @@ public class SkyblockMob {
                 healthAttribute.setBaseValue(getAttribute(MobAttributes.MAX_HEALTH));
 
 
-                entityInstance.setAI(getAttribute(MobAttributes.AI_ENABLED));
+                boolean aiEnabled = getAttribute(MobAttributes.AI_ENABLED);
+                entityInstance.setAI(aiEnabled);
+                if (aiEnabled && !aiModifiersApplied) {
+                    applyAIModifiers();
+                }
+                if (!aiEnabled) {
+                    aiModifiersApplied = false;
+                }
                 if (getAttribute(MobAttributes.FROZEN)) {
                     PotionEffect _frozenPotionEffect = new PotionEffect(PotionEffectType.SLOW, 15, 255, false, false);
                     entityInstance.addPotionEffect(_frozenPotionEffect);
@@ -166,6 +182,7 @@ public class SkyblockMob {
             entityInstance.setHealth(0);
         }
         entityInstance = null;
+        aiModifiersApplied = false;
     }
 
     /**
@@ -382,5 +399,122 @@ public class SkyblockMob {
     public SkyblockMob setLoot(MobLoot mobLoot) {
         this.mobLoot = mobLoot;
         return this;
+    }
+
+    public SkyblockMob addAIGoalSelector(String selector) {
+        if (selector != null && !selector.isBlank()) {
+            aiGoalSelectors.add(selector);
+            aiModifiersApplied = false;
+            if (entityInstance != null) {
+                MobAI.getHandler().addPathfinderGoals(entityInstance, List.of(selector));
+            }
+        }
+        return this;
+    }
+
+    public SkyblockMob addAITargetSelector(String selector) {
+        if (selector != null && !selector.isBlank()) {
+            aiTargetSelectors.add(selector);
+            aiModifiersApplied = false;
+            if (entityInstance != null) {
+                MobAI.getHandler().addTargetGoals(entityInstance, List.of(selector));
+            }
+        }
+        return this;
+    }
+
+    public SkyblockMob setAIGoalSelectors(List<String> selectors) {
+        aiGoalSelectors.clear();
+        if (selectors != null) {
+            for (String selector : selectors) {
+                if (selector != null && !selector.isBlank()) {
+                    aiGoalSelectors.add(selector);
+                }
+            }
+        }
+        aiModifiersApplied = false;
+        return this;
+    }
+
+    public SkyblockMob setAITargetSelectors(List<String> selectors) {
+        aiTargetSelectors.clear();
+        if (selectors != null) {
+            for (String selector : selectors) {
+                if (selector != null && !selector.isBlank()) {
+                    aiTargetSelectors.add(selector);
+                }
+            }
+        }
+        aiModifiersApplied = false;
+        return this;
+    }
+
+    public SkyblockMob setPathfindingMalus(String pathType, float malus) {
+        if (pathType != null && !pathType.isBlank()) {
+            aiPathfindingMalus.put(pathType, malus);
+            aiModifiersApplied = false;
+            if (entityInstance != null) {
+                MobAI.getHandler().setPathfindingMalus(entityInstance, pathType, malus);
+            }
+        }
+        return this;
+    }
+
+    public SkyblockMob clearAIGoalSelectors() {
+        aiGoalSelectors.clear();
+        aiModifiersApplied = false;
+        if (entityInstance != null) {
+            MobAI.getHandler().addPathfinderGoals(entityInstance, List.of("clear"));
+        }
+        return this;
+    }
+
+    public SkyblockMob clearAITargetSelectors() {
+        aiTargetSelectors.clear();
+        aiModifiersApplied = false;
+        if (entityInstance != null) {
+            MobAI.getHandler().addTargetGoals(entityInstance, List.of("clear"));
+        }
+        return this;
+    }
+
+    public void runAIGoalSelector(String selector) {
+        if (entityInstance == null || selector == null || selector.isBlank()) {
+            return;
+        }
+        MobAI.getHandler().addPathfinderGoals(entityInstance, List.of(selector));
+    }
+
+    public void runAITargetSelector(String selector) {
+        if (entityInstance == null || selector == null || selector.isBlank()) {
+            return;
+        }
+        MobAI.getHandler().addTargetGoals(entityInstance, List.of(selector));
+    }
+
+    public void applyAIModifiers() {
+        if (entityInstance == null) {
+            return;
+        }
+        if (aiModifiersApplied) {
+            return;
+        }
+        boolean aiEnabled = getAttribute(MobAttributes.AI_ENABLED);
+        if (!aiEnabled) {
+            return;
+        }
+
+        if (!aiGoalSelectors.isEmpty()) {
+            MobAI.getHandler().addPathfinderGoals(entityInstance, new ArrayList<>(aiGoalSelectors));
+        }
+        if (!aiTargetSelectors.isEmpty()) {
+            MobAI.getHandler().addTargetGoals(entityInstance, new ArrayList<>(aiTargetSelectors));
+        }
+        if (!aiPathfindingMalus.isEmpty()) {
+            aiPathfindingMalus.forEach((pathType, value) ->
+                    MobAI.getHandler().setPathfindingMalus(entityInstance, pathType, value)
+            );
+        }
+        aiModifiersApplied = true;
     }
 }
